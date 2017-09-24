@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <automatapila.h>
 
 namespace Ui {
 class MainWindow;
@@ -16,9 +17,14 @@ public:
     ~MainWindow();
 
 public slots:
+    void agregarEstado();
+    void actualizarVistas();
+
 
 private:
     Ui::MainWindow *ui;
+    AutomataPila *automata;
+    bool estadoInicial;
 };
 
 #endif // MAINWINDOW_H

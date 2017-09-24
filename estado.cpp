@@ -5,11 +5,11 @@ Estado::Estado(QObject *parent) : QObject(parent)
 
 }
 
-Estado::Estado(QString nombre, qint32 tipo, QObject *parent) : QObject(parent)
+Estado::Estado(QString nombre, int tipo, QObject *parent) : QObject(parent)
 {
     this->nombre = nombre;
     this->tipo = tipo;
-    this->reglas = new QList<Transicion>();
+    this->reglas = new QList<Transicion*>();
 }
 
 QString Estado::getNombre() const
@@ -27,25 +27,24 @@ qint32 Estado::getTipo() const
     return tipo;
 }
 
-void Estado::setTipo(const qint32 &value)
+void Estado::setTipo(const int &value)
 {
     tipo = value;
 }
 
 
-void Estado::agregarRegla(Transicion regla)
+void Estado::agregarRegla(Transicion *regla)
 {
-
+    reglas->append(regla);
 }
 
-void Estado::removerRegla(Transicion regla)
+void Estado::removerRegla(int i)
 {
-
+    reglas->removeAt(i);
 }
 
-Transicion Estado::getRegla(qint32 pos)
+Transicion* Estado::getRegla(int i)
 {
-
+    return reglas->at(i);
 }
-
 

@@ -8,24 +8,24 @@ class Estado : public QObject
 {
     Q_OBJECT
      Q_PROPERTY(QString nombre READ getNombre WRITE setNombre)
-     Q_PROPERTY(qint32 tipo READ getTipo WRITE setTipo)
+     Q_PROPERTY(int tipo READ getTipo WRITE setTipo)
 
 public:
-    const qint32 TIPO_NORMAL = 0;
-    const qint32 TIPO_ACEPTACION = 2;
-    const qint32 TIPO_INICIAL = 1;
+    static const int TIPO_NORMAL = 0;
+    static const int TIPO_ACEPTACION = 2;
+    static const int TIPO_INICIAL = 1;
     explicit Estado(QObject *parent = 0);
-    Estado(QString nombre, qint32 tipo, QObject *parent = 0);
+    Estado(QString nombre, int tipo, QObject *parent = 0);
 
     QString getNombre() const;
     void setNombre(const QString &value);
 
-    qint32 getTipo() const;
-    void setTipo(const qint32 &value);
+    int getTipo() const;
+    void setTipo(const int &value);
 
-    void agregarRegla(Transicion regla);
-    void removerRegla(Transicion regla);
-    Transicion getRegla(qint32 pos);
+    void agregarRegla(Transicion *regla);
+    void removerRegla(int i);
+    Transicion* getRegla(int i);
 
 signals:
 
@@ -33,8 +33,8 @@ public slots:
 
 private:
     QString nombre;
-    qint32 tipo;
-    QList<Transicion>* reglas ;
+    int tipo;
+    QList<Transicion*> *reglas ;
 
 };
 

@@ -15,11 +15,13 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     estado.cpp \
-    transicion.cpp
+    transicion.cpp \
+    automatapila.cpp
 
 HEADERS  += mainwindow.h \
     estado.h \
-    transicion.h
+    transicion.h \
+    automatapila.h
 
 FORMS    += mainwindow.ui
 

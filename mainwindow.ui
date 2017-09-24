@@ -40,7 +40,7 @@
            </size>
           </property>
           <property name="title">
-           <string>GroupBox</string>
+           <string>Agregar estado</string>
           </property>
           <layout class="QHBoxLayout" name="horizontalLayout_4">
            <property name="sizeConstraint">
@@ -65,10 +65,13 @@
                  <height>16777215</height>
                 </size>
                </property>
+               <property name="placeholderText">
+                <string>Nombre</string>
+               </property>
               </widget>
              </item>
              <item alignment="Qt::AlignHCenter">
-              <widget class="QPushButton" name="pushButton">
+              <widget class="QPushButton" name="bAgregarEstado">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                  <horstretch>0</horstretch>
@@ -76,7 +79,7 @@
                 </sizepolicy>
                </property>
                <property name="text">
-                <string>PushButton</string>
+                <string>Ok</string>
                </property>
               </widget>
              </item>
@@ -96,23 +99,26 @@
                 </sizepolicy>
                </property>
                <property name="title">
-                <string>GroupBox</string>
+                <string>Tipo</string>
                </property>
                <layout class="QVBoxLayout" name="verticalLayout_6">
                 <property name="sizeConstraint">
                  <enum>QLayout::SetMinimumSize</enum>
                 </property>
                 <item>
-                 <widget class="QRadioButton" name="radioButton">
+                 <widget class="QRadioButton" name="rNormal">
                   <property name="text">
-                   <string>RadioButton</string>
+                   <string>Normal</string>
+                  </property>
+                  <property name="checked">
+                   <bool>true</bool>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QRadioButton" name="radioButton_2">
+                 <widget class="QRadioButton" name="rAceptacion">
                   <property name="text">
-                   <string>RadioButton</string>
+                   <string>Aceptacion</string>
                   </property>
                  </widget>
                 </item>
@@ -127,7 +133,7 @@
         <item>
          <widget class="QGroupBox" name="groupBox_2">
           <property name="title">
-           <string>GroupBox</string>
+           <string>Agregar reglas</string>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_7">
            <item>
@@ -173,15 +179,69 @@
              </item>
             </layout>
            </item>
-           <item alignment="Qt::AlignHCenter">
-            <widget class="QLineEdit" name="lineEdit_2">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-            </widget>
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout">
+             <item>
+              <widget class="QLineEdit" name="lineEdit_4">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>60</width>
+                 <height>16777215</height>
+                </size>
+               </property>
+               <property name="placeholderText">
+                <string>Evaluar</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLineEdit" name="lineEdit_3">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>60</width>
+                 <height>16777215</height>
+                </size>
+               </property>
+               <property name="placeholderText">
+                <string>Sale</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLineEdit" name="lineEdit_2">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>60</width>
+                 <height>16777215</height>
+                </size>
+               </property>
+               <property name="inputMask">
+                <string/>
+               </property>
+               <property name="placeholderText">
+                <string>Entra</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
            </item>
            <item alignment="Qt::AlignHCenter">
             <widget class="QPushButton" name="pushButton_4">
@@ -192,7 +252,7 @@
               </sizepolicy>
              </property>
              <property name="text">
-              <string>PushButton</string>
+              <string>Ok</string>
              </property>
             </widget>
            </item>
