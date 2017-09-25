@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include "transicion.h"
+#include <QDebug>
 
 class Estado : public QObject
 {
@@ -25,6 +26,8 @@ public:
 
     void agregarRegla(Transicion *regla);
     void removerRegla(int i);
+    void printDebug();
+    int reglasCount();
     Transicion* getRegla(int i);
 
 signals:

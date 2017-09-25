@@ -22,6 +22,7 @@ public slots:
     void agregarEstado();
     void actualizarVistas();
     void agregarRegla();
+    void eliminarEstado();
 private:
     Ui::MainWindow *ui;
     AutomataPila *automata;

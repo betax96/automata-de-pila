@@ -22,15 +22,17 @@ bool AutomataPila::pilaVacia()
     return pila->isEmpty();
 }
 
+
 void AutomataPila::agregarEstado(Estado *e)
 {
     estados->append(e);
     emit modificacion();
 }
 
-void AutomataPila::removerEstado(int i)
+void AutomataPila::removerEstado(int k)
 {
-    estados->removeAt(i);
+    estados->removeAt(k);
+
     emit modificacion();
 }
 
@@ -39,3 +41,11 @@ Estado *AutomataPila::obtenerEstado(int i)
     return estados->at(i);
 }
 
+
+void AutomataPila::printDebug()
+{
+    for(int i=0;i<estados->count();i++){
+        obtenerEstado(i)->printDebug();
+    }
+    qDebug()<<"------";
+}

@@ -17,6 +17,7 @@ public:
     void removerEstado(int i);
     Estado* obtenerEstado(int i);
     bool pilaVacia();
+    void printDebug();
 signals:
     void modificacion();
 public slots:

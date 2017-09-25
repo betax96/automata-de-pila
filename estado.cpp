@@ -22,7 +22,7 @@ void Estado::setNombre(const QString &value)
     nombre = value;
 }
 
-qint32 Estado::getTipo() const
+int Estado::getTipo() const
 {
     return tipo;
 }
@@ -47,4 +47,21 @@ Transicion* Estado::getRegla(int i)
 {
     return reglas->at(i);
 }
+
+void Estado::printDebug()
+{
+    qDebug()<<getNombre()+" "+QString::number(tipo);
+    for(int i=0;i<reglas->count();i++){
+        Estado* estadoDestino = qobject_cast<Estado*>(getRegla(i)->getEstadoDestino());
+        qDebug()<<estadoDestino->getNombre()<<" : "
+               <<getRegla(i)->getLetraEval()<<"/"<<getRegla(i)->getSalePila()<<"/"<<getRegla(i)->getEntraPila();
+    }
+    qDebug()<<"---";
+}
+
+int Estado::reglasCount()
+{
+    return reglas->count();
+}
+
 
