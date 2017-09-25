@@ -3,6 +3,8 @@
 
 #include <QMainWindow>
 #include <automatapila.h>
+#include <QTreeWidgetItem>
+#include <qdebug.h>
 
 namespace Ui {
 class MainWindow;
@@ -19,8 +21,7 @@ public:
 public slots:
     void agregarEstado();
     void actualizarVistas();
-
-
+    void agregarRegla();
 private:
     Ui::MainWindow *ui;
     AutomataPila *automata;
