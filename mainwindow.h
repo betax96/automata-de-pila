@@ -23,6 +23,7 @@ public slots:
     void actualizarVistas();
     void agregarRegla();
     void eliminarEstado();
+    void evaluarExpresion();
 private:
     Ui::MainWindow *ui;
     AutomataPila *automata;

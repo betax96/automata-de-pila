@@ -18,11 +18,17 @@ public:
     Estado* obtenerEstado(int i);
     bool pilaVacia();
     void printDebug();
+    int evaluarExpresion(QString exp);
+    Estado* estadoInicial();
+    int estadosCount();
+
 signals:
     void modificacion();
 public slots:
 
 private:
+    bool recEval(QString exp, QString pila, Estado *e);
+
     QList<Estado*> *estados;
     QStack<QChar> *pila;
 };

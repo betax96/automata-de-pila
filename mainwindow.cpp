@@ -12,6 +12,15 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->bAgregarEstado,SIGNAL(clicked()),this,SLOT(agregarEstado()));
     connect(ui->bAgregarRegla,SIGNAL(clicked()),this,SLOT(agregarRegla()));
     connect(ui->bEliminar,SIGNAL(clicked()),this,SLOT(eliminarEstado()));
+    connect(ui->bEvaluar,SIGNAL(clicked()),this,SLOT(evaluarExpresion()));
+    /*automata->agregarEstado(new Estado("e1",Estado::TIPO_INICIAL));
+    automata->agregarEstado(new Estado("e2",Estado::TIPO_ACEPTACION));
+    automata->obtenerEstado(0)->agregarRegla(new Transicion('*','#','a',automata->obtenerEstado(0)));
+    automata->obtenerEstado(0)->agregarRegla(new Transicion('a','a','b',automata->obtenerEstado(1)));
+    automata->obtenerEstado(1)->agregarRegla(new Transicion('b','b','a',automata->obtenerEstado(0)));
+    automata->obtenerEstado(1)->agregarRegla(new Transicion('b','a','a',automata->obtenerEstado(1)));
+
+    ui->lExpresion->setText("ababa");*/
 
 }
 
@@ -54,11 +63,12 @@ void MainWindow::eliminarEstado(){
             delete ui->lEstados2->item(itemRow);
             delete ui->treeWidget->selectedItems().at(0);
             automata->removerEstado(itemRow);
+            if(automata->estadosCount()==0){
+                estadoInicial = false;
+            }
         }else{
 
             int topRow = ui->treeWidget->indexOfTopLevelItem(ui->treeWidget->selectedItems().at(0)->parent());
-            qDebug()<<itemRow;
-            qDebug()<<topRow;
             automata->obtenerEstado(topRow)->removerRegla(itemRow);
             delete ui->treeWidget->selectedItems().at(0);
         }
@@ -87,6 +97,21 @@ void MainWindow::agregarRegla()
         ui->treeWidget->topLevelItem(estado1)->addChild(item);
     }
 
+}
+
+void MainWindow::evaluarExpresion(){
+    QString exp = ui->lExpresion->text();
+    int result = automata->evaluarExpresion(exp);
+    switch(result){
+    case 0:
+        ui->lEvalResult->setText("Expresion no valida");
+        break;
+    case 1:
+        ui->lEvalResult->setText("Expresion aceptada");
+        break;
+    default:
+        ui->lEvalResult->setText("Error");
+    }
 }
 
 void MainWindow::actualizarVistas()
