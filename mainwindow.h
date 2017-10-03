@@ -5,6 +5,9 @@
 #include <automatapila.h>
 #include <QTreeWidgetItem>
 #include <qdebug.h>
+#include <QSvgWidget>
+#include <QDir>
+#include "graphsvg.h"
 
 namespace Ui {
 class MainWindow;
@@ -28,6 +31,9 @@ private:
     Ui::MainWindow *ui;
     AutomataPila *automata;
     bool estadoInicial;
+    int stateIdCount;
+    int transitionIdCount;
+    GraphSvg *graph;
 };
 
 #endif // MAINWINDOW_H

@@ -5,11 +5,12 @@ Estado::Estado(QObject *parent) : QObject(parent)
 
 }
 
-Estado::Estado(QString nombre, int tipo, QObject *parent) : QObject(parent)
+Estado::Estado(int id, QString nombre, int tipo, QObject *parent) : QObject(parent)
 {
     this->nombre = nombre;
     this->tipo = tipo;
     this->reglas = new QList<Transicion*>();
+    this->id = id;
 }
 
 QString Estado::getNombre() const
@@ -48,13 +49,23 @@ Transicion* Estado::getRegla(int i)
     return reglas->at(i);
 }
 
+int Estado::getId() const
+{
+    return id;
+}
+
+void Estado::setId(int value)
+{
+    id = value;
+}
+
 void Estado::printDebug()
 {
-    qDebug()<<getNombre()+" "+QString::number(tipo);
+    qDebug()<<getId()+" "+getNombre()+" "+QString::number(tipo);
     for(int i=0;i<reglas->count();i++){
         Estado* estadoDestino = qobject_cast<Estado*>(getRegla(i)->getEstadoDestino());
-        qDebug()<<estadoDestino->getNombre()<<" : "
-               <<getRegla(i)->getLetraEval()<<"/"<<getRegla(i)->getSalePila()<<"/"<<getRegla(i)->getEntraPila();
+        qDebug()<<estadoDestino->getId()<<" "<<estadoDestino->getNombre()<<" : "
+               <<getRegla(i)->getId()<<" "<<getRegla(i)->getLetraEval()<<"/"<<getRegla(i)->getSalePila()<<"/"<<getRegla(i)->getEntraPila();
     }
     qDebug()<<"---";
 }

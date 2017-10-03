@@ -66,6 +66,11 @@ int AutomataPila::estadosCount()
     return estados->count();
 }
 
+int AutomataPila::getIndex(Estado *estado)
+{
+    return estados->indexOf(estado);
+}
+
 int AutomataPila::evaluarExpresion(QString exp)
 {
     if(estadoInicial()==NULL){

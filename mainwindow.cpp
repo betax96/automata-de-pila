@@ -1,7 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -9,18 +8,28 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     automata = new AutomataPila();
     estadoInicial = false;
+    this->layout()->setSizeConstraint(QLayout::SetFixedSize);
     connect(ui->bAgregarEstado,SIGNAL(clicked()),this,SLOT(agregarEstado()));
     connect(ui->bAgregarRegla,SIGNAL(clicked()),this,SLOT(agregarRegla()));
     connect(ui->bEliminar,SIGNAL(clicked()),this,SLOT(eliminarEstado()));
     connect(ui->bEvaluar,SIGNAL(clicked()),this,SLOT(evaluarExpresion()));
+    stateIdCount = 0;
+    transitionIdCount = 0;
+    graph = new GraphSvg(QSize(30,30),Color("#000000"),Color("#ffffff"));
+
+
     /*automata->agregarEstado(new Estado("e1",Estado::TIPO_INICIAL));
     automata->agregarEstado(new Estado("e2",Estado::TIPO_ACEPTACION));
     automata->obtenerEstado(0)->agregarRegla(new Transicion('*','#','a',automata->obtenerEstado(0)));
     automata->obtenerEstado(0)->agregarRegla(new Transicion('a','a','b',automata->obtenerEstado(1)));
     automata->obtenerEstado(1)->agregarRegla(new Transicion('b','b','a',automata->obtenerEstado(0)));
-    automata->obtenerEstado(1)->agregarRegla(new Transicion('b','a','a',automata->obtenerEstado(1)));
+    automata->obtenerEstado(1)->agregarRegla(new Transicion('b','a','a',automata->obtenerEstado(1)));*/
 
-    ui->lExpresion->setText("ababa");*/
+    ui->scrollArea->setWidget(ui->svgView);
+    //ui->scrollArea->
+    //ui->svgView->si
+
+
 
 }
 
@@ -42,12 +51,19 @@ void MainWindow::agregarEstado()
                 tipo = Estado::TIPO_ACEPTACION;
             }
         }
-        automata->agregarEstado(new Estado(nombre,tipo));
+        automata->agregarEstado(new Estado(stateIdCount,nombre,tipo));
         ui->lEstados1->addItem(nombre);
         ui->lEstados2->addItem(nombre);
         QTreeWidgetItem* item = new QTreeWidgetItem();
         item->setText(0,nombre);
         ui->treeWidget->addTopLevelItem(item);
+        stateIdCount++;
+
+        graph = new GraphSvg(QSize(30,30),Color("#000000"),Color("#ffffff"));
+        graph->drawAuto(automata);
+        graph->saveSvg("graph.o");
+        ui->svgView->load(QDir::currentPath()+"/graph.o");
+        ui->svgView->adjustSize();
     }
      automata->printDebug();
 
@@ -88,13 +104,20 @@ void MainWindow::agregarRegla()
         QChar eval = ui->lEval->text().at(0);
         QChar sale = ui->lSale->text().at(0);
         QChar entra = ui->lEntra->text().at(0);
-
-        automata->obtenerEstado(estado1)->agregarRegla(new Transicion(eval,sale,entra,automata->obtenerEstado(estado2)));
+        Estado* estadoOrigen = automata->obtenerEstado(estado1);
+        estadoOrigen->agregarRegla(new Transicion(transitionIdCount,eval,sale,entra,estadoOrigen,automata->obtenerEstado(estado2)));
         QTreeWidgetItem* item = new QTreeWidgetItem();
         item->setText(0,ui->lEstados2->currentItem()->text());
         QString text2 = ui->lEval->text()+"/"+ui->lSale->text()+"/"+ui->lEntra->text();
         item->setText(1,text2);
         ui->treeWidget->topLevelItem(estado1)->addChild(item);
+        transitionIdCount++;
+
+        graph = new GraphSvg(QSize(30,30),Color("#000000"),Color("#ffffff"));
+        graph->drawAuto(automata);
+        graph->saveSvg("graph.o");
+        ui->svgView->load(QDir::currentPath()+"/graph.o");
+        ui->svgView->adjustSize();
     }
 
 }

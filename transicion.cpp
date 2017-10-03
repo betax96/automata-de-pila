@@ -5,12 +5,15 @@ Transicion::Transicion(QObject *parent) : QObject(parent)
 
 }
 
-Transicion::Transicion(QChar letraEval, QChar salePila, QChar entraPila, QObject* estadoDestino, QObject *parent) : QObject(parent)
+Transicion::Transicion(int id, QChar letraEval, QChar salePila, QChar entraPila, QObject* estadoOrigen,
+                       QObject* estadoDestino, QObject *parent) : QObject(parent)
 {
     this->letraEval = letraEval;
     this->salePila = salePila;
     this->entraPila = entraPila;
+    this->estadoOrigen = estadoOrigen;
     this->estadoDestino = estadoDestino;
+    this->id = id;
 
 }
 
@@ -52,4 +55,24 @@ QObject* Transicion::getEstadoDestino() const
 void Transicion::setEstadoDestino(QObject* &value)
 {
     estadoDestino = value;
+}
+
+QObject *Transicion::getEstadoOrigen() const
+{
+    return estadoOrigen;
+}
+
+void Transicion::setEstadoOrigen(QObject *value)
+{
+    estadoOrigen = value;
+}
+
+int Transicion::getId() const
+{
+    return id;
+}
+
+void Transicion::setId(int value)
+{
+    id = value;
 }

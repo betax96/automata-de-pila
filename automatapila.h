@@ -21,6 +21,7 @@ public:
     int evaluarExpresion(QString exp);
     Estado* estadoInicial();
     int estadosCount();
+    int getIndex(Estado *estado);
 
 signals:
     void modificacion();
