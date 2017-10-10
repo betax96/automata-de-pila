@@ -1,7 +1,7 @@
 #include "mainwindow.h"
 #include <QApplication>
 #include <QDebug>
-#include <estado.h>
+#include <state.h>
 
 int main(int argc, char *argv[])
 {

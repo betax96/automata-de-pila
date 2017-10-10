@@ -2,47 +2,41 @@
 #define ESTADO_H
 
 #include <QObject>
-#include "transicion.h"
+#include "transition.h"
 #include <QDebug>
 
-class Estado : public QObject
+class State : public QObject
 {
     Q_OBJECT
-     Q_PROPERTY(QString nombre READ getNombre WRITE setNombre)
-     Q_PROPERTY(int tipo READ getTipo WRITE setTipo)
-     Q_PROPERTY(int id READ getId WRITE setId)
-
+     Q_PROPERTY(QString name READ getName WRITE setName)
+     Q_PROPERTY(int type READ getType WRITE setType)
 public:
-    static const int TIPO_NORMAL = 0;
-    static const int TIPO_ACEPTACION = 2;
-    static const int TIPO_INICIAL = 1;
-    explicit Estado(QObject *parent = 0);
-    Estado(int id, QString nombre, int tipo, QObject *parent = 0);
+    static const int TYPE_NORMAL = 0;
+    static const int TYPE_ACCEPT = 2;
+    static const int TYPE_INIT = 1;
+    explicit State(QObject *parent = 0);
+    State(QString name, int type, QObject *parent = 0);
 
-    QString getNombre() const;
-    void setNombre(const QString &value);
+    QString getName() const;
+    void setName(const QString &name);
 
-    int getTipo() const;
-    void setTipo(const int &value);
+    int getType() const;
+    void setType(const int &type);
 
-    void agregarRegla(Transicion *regla);
-    void removerRegla(int i);
+    void addRule(Transition *rule);
+    void removeRule(int index);
     void printDebug();
-    int reglasCount();
-    Transicion* getRegla(int i);
-
-    int getId() const;
-    void setId(int value);
+    int ruleCount();
+    Transition* getRule(int index);
 
 signals:
 
 public slots:
 
 private:
-    int id;
-    QString nombre;
-    int tipo;
-    QList<Transicion*> *reglas ;
+    QString name;
+    int type;
+    QList<Transition*> *rules ;
 
 };
 

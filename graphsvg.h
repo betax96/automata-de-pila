@@ -8,10 +8,9 @@
 #include <ogdf/planarity/PlanarizationLayout.h>
 #include <ogdf/fileformats/GraphIO.h>
 #include <QSize>
-#include "estado.h"
-#include "transicion.h"
-#include "automatapila.h"
-
+#include "state.h"
+#include "transition.h"
+#include "pdautomaton.h"
 
 using namespace ogdf;
 class GraphSvg : public QObject
@@ -21,10 +20,11 @@ public:
      explicit GraphSvg(QObject *parent);
     GraphSvg(QSize defaultSize, Color defaultEdgeColor,Color defaultNodeColor, QObject *parent = 0);
 
-    node addNode(Estado *state, QSize size, Color nodeColor);
+    node addNode(State *state, QSize size, Color nodeColor);
     void addEdge(node source, node target, Color edgeColor);
-    void drawAuto(AutomataPila *automata);
+    void drawAuto(PDAutomaton *automata, Color init, Color acept);
     bool saveSvg(QString name);
+    bool haveEdge(node source, node target);
 signals:
 
 public slots:

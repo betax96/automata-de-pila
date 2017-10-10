@@ -2,7 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <automatapila.h>
+#include <pdautomaton.h>
 #include <QTreeWidgetItem>
 #include <qdebug.h>
 #include <QSvgWidget>
@@ -22,17 +22,15 @@ public:
     ~MainWindow();
 
 public slots:
-    void agregarEstado();
-    void actualizarVistas();
-    void agregarRegla();
-    void eliminarEstado();
-    void evaluarExpresion();
+    void addState();
+    void addRule();
+    void removeState();
+    void evaluateExp();
+    void refresh();
 private:
     Ui::MainWindow *ui;
-    AutomataPila *automata;
-    bool estadoInicial;
-    int stateIdCount;
-    int transitionIdCount;
+    PDAutomaton *pdAutomaton;
+    bool haveInitState;
     GraphSvg *graph;
 };
 

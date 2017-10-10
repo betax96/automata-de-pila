@@ -2,36 +2,29 @@
 #define AUTOMATAPILA_H
 
 #include <QObject>
-#include "estado.h"
-#include <QStack>
+#include "state.h"
 
-class AutomataPila : public QObject
+class PDAutomaton : public QObject
 {
     Q_OBJECT
 public:
-    explicit AutomataPila(QObject *parent = 0);
+    explicit PDAutomaton(QObject *parent = 0);
 
-    void entraPila(QChar c);
-    QChar salePila();
-    void agregarEstado(Estado *e);
-    void removerEstado(int i);
-    Estado* obtenerEstado(int i);
-    bool pilaVacia();
+    void addState(State *state);
+    void removeState(int index);
+    State* getState(int index);
     void printDebug();
-    int evaluarExpresion(QString exp);
-    Estado* estadoInicial();
-    int estadosCount();
-    int getIndex(Estado *estado);
+    int evaluateExp(QString exp);
+    State* initState();
+    int stateCount();
+    int getIndex(State *state);
 
-signals:
-    void modificacion();
 public slots:
 
 private:
-    bool recEval(QString exp, QString pila, Estado *e);
+    bool recEval(QString exp, QString stack, State *e);
 
-    QList<Estado*> *estados;
-    QStack<QChar> *pila;
+    QList<State*> *states;
 };
 
 #endif // AUTOMATAPILA_H

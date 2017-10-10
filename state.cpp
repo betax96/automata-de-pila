@@ -1,78 +1,68 @@
-#include "estado.h"
+#include "state.h"
 
-Estado::Estado(QObject *parent) : QObject(parent)
+State::State(QObject *parent) : QObject(parent)
 {
 
 }
 
-Estado::Estado(int id, QString nombre, int tipo, QObject *parent) : QObject(parent)
+State::State(QString name, int type, QObject *parent) : QObject(parent)
 {
-    this->nombre = nombre;
-    this->tipo = tipo;
-    this->reglas = new QList<Transicion*>();
-    this->id = id;
+    this->name = name;
+    this->type = type;
+    this->rules = new QList<Transition*>();
+
 }
 
-QString Estado::getNombre() const
+QString State::getName() const
 {
-    return nombre;
+    return name;
 }
 
-void Estado::setNombre(const QString &value)
+void State::setName(const QString &name)
 {
-    nombre = value;
+    this->name = name;
 }
 
-int Estado::getTipo() const
+int State::getType() const
 {
-    return tipo;
+    return type;
 }
 
-void Estado::setTipo(const int &value)
+void State::setType(const int &type)
 {
-    tipo = value;
+    this->type = type;
 }
 
 
-void Estado::agregarRegla(Transicion *regla)
+void State::addRule(Transition *rule)
 {
-    reglas->append(regla);
+    rules->append(rule);
 }
 
-void Estado::removerRegla(int i)
+void State::removeRule(int index)
 {
-    reglas->removeAt(i);
+    rules->removeAt(index);
 }
 
-Transicion* Estado::getRegla(int i)
+Transition* State::getRule(int index)
 {
-    return reglas->at(i);
+    return rules->at(index);
 }
 
-int Estado::getId() const
+void State::printDebug()
 {
-    return id;
-}
-
-void Estado::setId(int value)
-{
-    id = value;
-}
-
-void Estado::printDebug()
-{
-    qDebug()<<getId()+" "+getNombre()+" "+QString::number(tipo);
-    for(int i=0;i<reglas->count();i++){
-        Estado* estadoDestino = qobject_cast<Estado*>(getRegla(i)->getEstadoDestino());
-        qDebug()<<estadoDestino->getId()<<" "<<estadoDestino->getNombre()<<" : "
-               <<getRegla(i)->getId()<<" "<<getRegla(i)->getLetraEval()<<"/"<<getRegla(i)->getSalePila()<<"/"<<getRegla(i)->getEntraPila();
+    qDebug()<<getName()+" "+QString::number(type);
+    for(int i=0;i<rules->count();i++){
+        State* estadoDestino = qobject_cast<State*>(getRule(i)->getTargetState());
+        qDebug()<<estadoDestino->getName()<<" : "
+               <<getRule(i)->getEvalChar()<<"/"<<getRule(i)->getStackOut()<<"/"<<getRule(i)->getStackIn();
     }
     qDebug()<<"---";
 }
 
-int Estado::reglasCount()
+int State::ruleCount()
 {
-    return reglas->count();
+    return rules->count();
 }
 
 

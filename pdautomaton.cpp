@@ -1,139 +1,119 @@
-#include "automatapila.h"
+#include "pdautomaton.h"
 
-AutomataPila::AutomataPila(QObject *parent) : QObject(parent)
+PDAutomaton::PDAutomaton(QObject *parent) : QObject(parent)
 {
-    estados = new QList<Estado*>();
-    pila = new QStack<QChar>();
+    states = new QList<State*>();
 }
 
-void AutomataPila::entraPila(QChar c)
+void PDAutomaton::addState(State *state)
 {
-    pila->push(c);
+    states->append(state);
 }
 
-QChar AutomataPila::salePila()
+void PDAutomaton::removeState(int index)
 {
-    return pila->pop();
+    states->removeAt(index);
+
 }
 
-
-bool AutomataPila::pilaVacia()
+State *PDAutomaton::getState(int index)
 {
-    return pila->isEmpty();
-}
-
-
-void AutomataPila::agregarEstado(Estado *e)
-{
-    estados->append(e);
-    emit modificacion();
-}
-
-void AutomataPila::removerEstado(int k)
-{
-    estados->removeAt(k);
-
-    emit modificacion();
-}
-
-Estado *AutomataPila::obtenerEstado(int i)
-{
-    return estados->at(i);
+    return states->at(index);
 }
 
 
-void AutomataPila::printDebug()
+void PDAutomaton::printDebug()
 {
-    for(int i=0;i<estados->count();i++){
-        obtenerEstado(i)->printDebug();
+    for(int i=0;i<states->count();i++){
+        getState(i)->printDebug();
     }
     qDebug()<<"------";
 }
 
-Estado *AutomataPila::estadoInicial()
+State *PDAutomaton::initState()
 {
-    Estado *e = NULL;
-    for(int i=0;i<estados->count();i++){
-        if(obtenerEstado(i)->getTipo()==Estado::TIPO_INICIAL){
-            e = obtenerEstado(i);
+    State *e = NULL;
+    for(int i=0;i<states->count();i++){
+        if(getState(i)->getType()==State::TYPE_INIT){
+            e = getState(i);
         }
     }
     return e;
 }
 
-int AutomataPila::estadosCount()
+int PDAutomaton::stateCount()
 {
-    return estados->count();
+    return states->count();
 }
 
-int AutomataPila::getIndex(Estado *estado)
+int PDAutomaton::getIndex(State *state)
 {
-    return estados->indexOf(estado);
+    return states->indexOf(state);
 }
 
-int AutomataPila::evaluarExpresion(QString exp)
+int PDAutomaton::evaluateExp(QString exp)
 {
-    if(estadoInicial()==NULL){
+    if(initState()==NULL){
         return -1;
 
     }
-    return recEval(exp,"",estadoInicial());
+    return recEval(exp,"",initState());
 
 }
 
 
 
-bool AutomataPila::recEval(QString exp, QString pila, Estado *e)
+bool PDAutomaton::recEval(QString exp, QString stack, State *state)
 {
-    if(exp.count()==0&&e->getTipo()==Estado::TIPO_ACEPTACION){
+    if(exp.count()==0&&state->getType()==State::TYPE_ACCEPT){
         return true;
     }
-    if(exp.count()==0||e==NULL){
+    if(exp.count()==0||state==NULL){
         return false;
     }
     int acp = false;
     QChar c = exp.at(0);
-    for(int i=0;i<e->reglasCount();i++){
-        Transicion *r = e->getRegla(i);
-        QString tPila = pila;
-        if(r->getLetraEval()=='*'){
-            if(r->getSalePila()=='*'){
+    for(int i=0;i<state->ruleCount();i++){
+        Transition *r = state->getRule(i);
+        QString tStack = stack;
+        if(r->getEvalChar()=='*'){
+            if(r->getStackOut()=='*'){
 
-                if(r->getEntraPila()!='*'){
-                     tPila=tPila.prepend(r->getEntraPila());
+                if(r->getStackIn()!='*'){
+                     tStack=tStack.prepend(r->getStackIn());
                 }
-                acp=acp||recEval(exp,tPila,qobject_cast<Estado*>(r->getEstadoDestino()));
-            }else if(r->getSalePila()=='#'&&tPila.count()==0){
-                if(r->getEntraPila()!='*'){
-                     tPila=tPila.prepend(r->getEntraPila());
+                acp=acp||recEval(exp,tStack,qobject_cast<State*>(r->getTargetState()));
+            }else if(r->getStackOut()=='#'&&tStack.count()==0){
+                if(r->getStackIn()!='*'){
+                     tStack=tStack.prepend(r->getStackIn());
                 }
-                acp=acp||recEval(exp,tPila,qobject_cast<Estado*>(r->getEstadoDestino()));
-            }else if(pila.count()>0&&r->getSalePila()==pila.at(0)){
-                tPila=tPila.remove(0,1);
-                if(r->getEntraPila()!='*'){
-                     tPila=tPila.prepend(r->getEntraPila());
+                acp=acp||recEval(exp,tStack,qobject_cast<State*>(r->getTargetState()));
+            }else if(stack.count()>0&&r->getStackOut()==stack.at(0)){
+                tStack=tStack.remove(0,1);
+                if(r->getStackIn()!='*'){
+                     tStack=tStack.prepend(r->getStackIn());
                 }
-                acp=acp||recEval(exp,tPila,qobject_cast<Estado*>(r->getEstadoDestino()));
+                acp=acp||recEval(exp,tStack,qobject_cast<State*>(r->getTargetState()));
             }
         }else{
-            if(r->getLetraEval()==c){
-                if(r->getSalePila()=='*'){
+            if(r->getEvalChar()==c){
+                if(r->getStackOut()=='*'){
 
-                    if(r->getEntraPila()!='*'){
-                         tPila=tPila.prepend(r->getEntraPila());
+                    if(r->getStackIn()!='*'){
+                         tStack=tStack.prepend(r->getStackIn());
                     }
-                    acp=acp||recEval(exp.remove(0,1),tPila,qobject_cast<Estado*>(r->getEstadoDestino()));
-                }else if(r->getSalePila()=='#'&&tPila.count()==0){
-                    if(r->getEntraPila()!='*'){
-                         tPila=tPila.prepend(r->getEntraPila());
+                    acp=acp||recEval(exp.remove(0,1),tStack,qobject_cast<State*>(r->getTargetState()));
+                }else if(r->getStackOut()=='#'&&tStack.count()==0){
+                    if(r->getStackIn()!='*'){
+                         tStack=tStack.prepend(r->getStackIn());
                     }
-                    acp=acp||recEval(exp,tPila,qobject_cast<Estado*>(r->getEstadoDestino()));
-                }else if(pila.count()>0&&r->getSalePila()==pila.at(0)){
-                    tPila=tPila.remove(0,1);
-                    if(r->getEntraPila()!='*'){
-                         tPila=tPila.prepend(r->getEntraPila());
+                    acp=acp||recEval(exp,tStack,qobject_cast<State*>(r->getTargetState()));
+                }else if(stack.count()>0&&r->getStackOut()==stack.at(0)){
+                    tStack=tStack.remove(0,1);
+                    if(r->getStackIn()!='*'){
+                         tStack=tStack.prepend(r->getStackIn());
                     }
-                    acp=acp||recEval(exp.remove(0,1),tPila,qobject_cast<Estado*>(r->getEstadoDestino()));
+                    acp=acp||recEval(exp.remove(0,1),tStack,qobject_cast<State*>(r->getTargetState()));
                 }
             }
         }

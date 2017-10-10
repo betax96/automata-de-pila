@@ -6,31 +6,14 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    automata = new AutomataPila();
-    estadoInicial = false;
+    pdAutomaton = new PDAutomaton();
+    haveInitState = false;
     this->layout()->setSizeConstraint(QLayout::SetFixedSize);
-    connect(ui->bAgregarEstado,SIGNAL(clicked()),this,SLOT(agregarEstado()));
-    connect(ui->bAgregarRegla,SIGNAL(clicked()),this,SLOT(agregarRegla()));
-    connect(ui->bEliminar,SIGNAL(clicked()),this,SLOT(eliminarEstado()));
-    connect(ui->bEvaluar,SIGNAL(clicked()),this,SLOT(evaluarExpresion()));
-    stateIdCount = 0;
-    transitionIdCount = 0;
-    graph = new GraphSvg(QSize(30,30),Color("#000000"),Color("#ffffff"));
-
-
-    /*automata->agregarEstado(new Estado("e1",Estado::TIPO_INICIAL));
-    automata->agregarEstado(new Estado("e2",Estado::TIPO_ACEPTACION));
-    automata->obtenerEstado(0)->agregarRegla(new Transicion('*','#','a',automata->obtenerEstado(0)));
-    automata->obtenerEstado(0)->agregarRegla(new Transicion('a','a','b',automata->obtenerEstado(1)));
-    automata->obtenerEstado(1)->agregarRegla(new Transicion('b','b','a',automata->obtenerEstado(0)));
-    automata->obtenerEstado(1)->agregarRegla(new Transicion('b','a','a',automata->obtenerEstado(1)));*/
-
+    connect(ui->addStateButton,SIGNAL(clicked()),this,SLOT(addState()));
+    connect(ui->addRuleButton,SIGNAL(clicked()),this,SLOT(addRule()));
+    connect(ui->removeButton,SIGNAL(clicked()),this,SLOT(removeState()));
+    connect(ui->evaluateButton,SIGNAL(clicked()),this,SLOT(evaluateExp()));
     ui->scrollArea->setWidget(ui->svgView);
-    //ui->scrollArea->
-    //ui->svgView->si
-
-
-
 }
 
 MainWindow::~MainWindow()
@@ -38,108 +21,109 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::agregarEstado()
+void MainWindow::addState()
 {
-    if(ui->lineEdit->text().length()>0){
-        QString nombre = ui->lineEdit->text();
-        int tipo = Estado::TIPO_NORMAL;
-        if(!estadoInicial){
-            tipo = Estado::TIPO_INICIAL;
-            estadoInicial = true;
-        }else{
-            if(ui->rAceptacion->isChecked()){
-                tipo = Estado::TIPO_ACEPTACION;
-            }
+    if(ui->addStateText->text().length()>0){
+        QString name = ui->addStateText->text();
+        int type = State::TYPE_NORMAL;
+        if(ui->radioTypeInit->isChecked()){
+            type= State::TYPE_INIT;
+            haveInitState = true;
+            ui->radioTypeNormal->setChecked(true);
+        }else if(ui->radioTypeAccept->isChecked()){
+            type= State::TYPE_ACCEPT;
         }
-        automata->agregarEstado(new Estado(stateIdCount,nombre,tipo));
-        ui->lEstados1->addItem(nombre);
-        ui->lEstados2->addItem(nombre);
+        pdAutomaton->addState(new State(name,type));
+        ui->stateList1->addItem(name);
+        ui->stateList2->addItem(name);
         QTreeWidgetItem* item = new QTreeWidgetItem();
-        item->setText(0,nombre);
+        item->setText(0,name);
         ui->treeWidget->addTopLevelItem(item);
-        stateIdCount++;
+        refresh();
 
-        graph = new GraphSvg(QSize(30,30),Color("#000000"),Color("#ffffff"));
-        graph->drawAuto(automata);
-        graph->saveSvg("graph.o");
-        ui->svgView->load(QDir::currentPath()+"/graph.o");
-        ui->svgView->adjustSize();
+
     }
-     automata->printDebug();
+     pdAutomaton->printDebug();
 
 }
 
-void MainWindow::eliminarEstado(){
+void MainWindow::removeState(){
 
-    if(ui->treeWidget->topLevelItemCount()>0){
+    if(ui->treeWidget->topLevelItemCount()>0&&ui->treeWidget->selectedItems().count()>0){
         int itemRow = ui->treeWidget->currentIndex().row();
         if(ui->treeWidget->selectedItems().at(0)->parent()==NULL){
 
-            delete ui->lEstados1->item(itemRow);
-            delete ui->lEstados2->item(itemRow);
+            delete ui->stateList1->item(itemRow);
+            delete ui->stateList2->item(itemRow);
             delete ui->treeWidget->selectedItems().at(0);
-            automata->removerEstado(itemRow);
-            if(automata->estadosCount()==0){
-                estadoInicial = false;
+            int tipo = pdAutomaton->getState(itemRow)->getType();
+            pdAutomaton->removeState(itemRow);
+            if(pdAutomaton->stateCount()==0||tipo == State::TYPE_INIT){
+                haveInitState = false;
+                ui->radioTypeInit->setDisabled(false);
             }
         }else{
 
             int topRow = ui->treeWidget->indexOfTopLevelItem(ui->treeWidget->selectedItems().at(0)->parent());
-            automata->obtenerEstado(topRow)->removerRegla(itemRow);
+            pdAutomaton->getState(topRow)->removeRule(itemRow);
             delete ui->treeWidget->selectedItems().at(0);
         }
+        refresh();
 
     }
 
 }
 
-void MainWindow::agregarRegla()
+void MainWindow::addRule()
 {
-    if(ui->lEstados1->count()>0&&ui->lEval->text().length()>0&&
-            ui->lSale->text().length()>0&&ui->lEntra->text().length()>0){
+    if(ui->stateList1->count()>0&&ui->evalCharText->text().length()>0&&
+            ui->stackOutText->text().length()>0&&ui->stackInText->text().length()>0&&
+            ui->stateList1->selectedItems().count()>0&&
+            ui->stateList2->selectedItems().count()>0){
 
-        int estado1 = ui->lEstados1->currentRow();
-        int estado2 = ui->lEstados2->currentRow();
+        int state1 = ui->stateList1->currentRow();
+        int state2 = ui->stateList2->currentRow();
 
-        QChar eval = ui->lEval->text().at(0);
-        QChar sale = ui->lSale->text().at(0);
-        QChar entra = ui->lEntra->text().at(0);
-        Estado* estadoOrigen = automata->obtenerEstado(estado1);
-        estadoOrigen->agregarRegla(new Transicion(transitionIdCount,eval,sale,entra,estadoOrigen,automata->obtenerEstado(estado2)));
+        QChar evalChar = ui->evalCharText->text().at(0);
+        QChar stackOut = ui->stackOutText->text().at(0);
+        QChar stackIn = ui->stackInText->text().at(0);
+        pdAutomaton->getState(state1)->addRule(new Transition(evalChar,stackOut,stackIn,pdAutomaton->getState(state2)));
         QTreeWidgetItem* item = new QTreeWidgetItem();
-        item->setText(0,ui->lEstados2->currentItem()->text());
-        QString text2 = ui->lEval->text()+"/"+ui->lSale->text()+"/"+ui->lEntra->text();
+        item->setText(0,ui->stateList2->currentItem()->text());
+        QString text2 = ui->evalCharText->text()+"/"+ui->stackOutText->text()+"/"+ui->stackInText->text();
         item->setText(1,text2);
-        ui->treeWidget->topLevelItem(estado1)->addChild(item);
-        transitionIdCount++;
+        ui->treeWidget->topLevelItem(state1)->addChild(item);
+        refresh();
 
-        graph = new GraphSvg(QSize(30,30),Color("#000000"),Color("#ffffff"));
-        graph->drawAuto(automata);
-        graph->saveSvg("graph.o");
-        ui->svgView->load(QDir::currentPath()+"/graph.o");
-        ui->svgView->adjustSize();
     }
 
 }
 
-void MainWindow::evaluarExpresion(){
-    QString exp = ui->lExpresion->text();
-    int result = automata->evaluarExpresion(exp);
+void MainWindow::evaluateExp(){
+    QString exp = ui->evaluateExpText->text();
+    int result = pdAutomaton->evaluateExp(exp);
     switch(result){
     case 0:
-        ui->lEvalResult->setText("Expresion no valida");
+        ui->evaluateResultLabel->setText("Expresion no valida");
         break;
     case 1:
-        ui->lEvalResult->setText("Expresion aceptada");
+        ui->evaluateResultLabel->setText("Expresion aceptada");
         break;
     default:
-        ui->lEvalResult->setText("Error");
+        ui->evaluateResultLabel->setText("Error");
     }
 }
 
-void MainWindow::actualizarVistas()
+void MainWindow::refresh()
 {
-
+    graph = new GraphSvg(QSize(30,30),Color("#000000"),Color("#ffffff"));
+    graph->drawAuto(pdAutomaton, Color("#A9F5A9"), Color("#F3F781"));
+    graph->saveSvg("graph.i");
+    ui->svgView->load(QDir::currentPath()+"/graph.i");
+    ui->svgView->adjustSize();
+    if(haveInitState){
+        ui->radioTypeInit->setDisabled(true);
+    }
 }
 
 

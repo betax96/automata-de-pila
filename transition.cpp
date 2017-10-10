@@ -1,78 +1,56 @@
-#include "transicion.h"
+#include "transition.h"
 
-Transicion::Transicion(QObject *parent) : QObject(parent)
+Transition::Transition(QObject *parent) : QObject(parent)
 {
 
 }
 
-Transicion::Transicion(int id, QChar letraEval, QChar salePila, QChar entraPila, QObject* estadoOrigen,
-                       QObject* estadoDestino, QObject *parent) : QObject(parent)
+Transition::Transition(QChar evalChar, QChar stackOut, QChar stackIn, QObject* targetState, QObject *parent) : QObject(parent)
 {
-    this->letraEval = letraEval;
-    this->salePila = salePila;
-    this->entraPila = entraPila;
-    this->estadoOrigen = estadoOrigen;
-    this->estadoDestino = estadoDestino;
-    this->id = id;
+    this->evalChar = evalChar;
+    this->stackOut = stackOut;
+    this->stackIn = stackIn;
+    this->targetState = targetState;
 
 }
 
-QChar Transicion::getLetraEval() const
+QChar Transition::getEvalChar() const
 {
-    return letraEval;
+    return evalChar;
 }
 
-void Transicion::setLetraEval(const QChar &value)
+void Transition::setEvalChar(const QChar &value)
 {
-    letraEval = value;
+    evalChar = value;
 }
 
-QChar Transicion::getSalePila() const
+QChar Transition::getStackOut() const
 {
-    return salePila;
+    return stackOut;
 }
 
-void Transicion::setSalePila(const QChar &value)
+void Transition::setStackOut(const QChar &value)
 {
-    salePila = value;
+    stackOut = value;
 }
 
-QChar Transicion::getEntraPila() const
+QChar Transition::getStackIn() const
 {
-    return entraPila;
+    return stackIn;
 }
 
-void Transicion::setEntraPila(const QChar &value)
+void Transition::setStackIn(const QChar &value)
 {
-    entraPila = value;
+    stackIn = value;
 }
 
-QObject* Transicion::getEstadoDestino() const
+QObject* Transition::getTargetState() const
 {
-    return estadoDestino;
+    return targetState;
 }
 
-void Transicion::setEstadoDestino(QObject* &value)
+void Transition::setTargetState(QObject* &state)
 {
-    estadoDestino = value;
+    targetState = state;
 }
 
-QObject *Transicion::getEstadoOrigen() const
-{
-    return estadoOrigen;
-}
-
-void Transicion::setEstadoOrigen(QObject *value)
-{
-    estadoOrigen = value;
-}
-
-int Transicion::getId() const
-{
-    return id;
-}
-
-void Transicion::setId(int value)
-{
-    id = value;
-}

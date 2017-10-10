@@ -9,22 +9,22 @@ QT += svg
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = automata-pila
+TARGET = pdautomaton
 TEMPLATE = app
 
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    estado.cpp \
-    transicion.cpp \
-    automatapila.cpp \
-    graphsvg.cpp
+    graphsvg.cpp \
+    state.cpp \
+    transition.cpp \
+    pdautomaton.cpp
 
 HEADERS  += mainwindow.h \
-    estado.h \
-    transicion.h \
-    automatapila.h \
-    graphsvg.h
+    graphsvg.h \
+    state.h \
+    transition.h \
+    pdautomaton.h
 
 FORMS    += mainwindow.ui
 

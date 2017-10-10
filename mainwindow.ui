@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1021</width>
+    <width>1039</width>
     <height>738</height>
    </rect>
   </property>
@@ -58,7 +58,7 @@
               <enum>QLayout::SetMinimumSize</enum>
              </property>
              <item alignment="Qt::AlignHCenter">
-              <widget class="QLineEdit" name="lineEdit">
+              <widget class="QLineEdit" name="addStateText">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                  <horstretch>0</horstretch>
@@ -77,7 +77,7 @@
               </widget>
              </item>
              <item alignment="Qt::AlignHCenter">
-              <widget class="QPushButton" name="bAgregarEstado">
+              <widget class="QPushButton" name="addStateButton">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                  <horstretch>0</horstretch>
@@ -112,9 +112,9 @@
                  <enum>QLayout::SetMinimumSize</enum>
                 </property>
                 <item>
-                 <widget class="QRadioButton" name="rNormal">
+                 <widget class="QRadioButton" name="radioTypeInit">
                   <property name="text">
-                   <string>Normal</string>
+                   <string>Inicial</string>
                   </property>
                   <property name="checked">
                    <bool>true</bool>
@@ -122,7 +122,17 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QRadioButton" name="rAceptacion">
+                 <widget class="QRadioButton" name="radioTypeNormal">
+                  <property name="text">
+                   <string>Normal</string>
+                  </property>
+                  <property name="checked">
+                   <bool>false</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QRadioButton" name="radioTypeAccept">
                   <property name="text">
                    <string>Aceptacion</string>
                   </property>
@@ -145,7 +155,7 @@
            <item>
             <layout class="QHBoxLayout" name="horizontalLayout_5">
              <item>
-              <widget class="QListWidget" name="lEstados1">
+              <widget class="QListWidget" name="stateList1">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
                  <horstretch>0</horstretch>
@@ -168,7 +178,7 @@
               </widget>
              </item>
              <item>
-              <widget class="QListWidget" name="lEstados2">
+              <widget class="QListWidget" name="stateList2">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
                  <horstretch>0</horstretch>
@@ -208,7 +218,7 @@
            <item>
             <layout class="QHBoxLayout" name="horizontalLayout">
              <item>
-              <widget class="QLineEdit" name="lEval">
+              <widget class="QLineEdit" name="evalCharText">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                  <horstretch>0</horstretch>
@@ -246,7 +256,7 @@
               </widget>
              </item>
              <item>
-              <widget class="QLineEdit" name="lSale">
+              <widget class="QLineEdit" name="stackOutText">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                  <horstretch>0</horstretch>
@@ -281,7 +291,7 @@
               </widget>
              </item>
              <item>
-              <widget class="QLineEdit" name="lEntra">
+              <widget class="QLineEdit" name="stackInText">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                  <horstretch>0</horstretch>
@@ -308,7 +318,7 @@
             </layout>
            </item>
            <item alignment="Qt::AlignHCenter">
-            <widget class="QPushButton" name="bAgregarRegla">
+            <widget class="QPushButton" name="addRuleButton">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                <horstretch>0</horstretch>
@@ -332,7 +342,7 @@
            <item>
             <layout class="QVBoxLayout" name="verticalLayout_9">
              <item>
-              <widget class="QLineEdit" name="lExpresion">
+              <widget class="QLineEdit" name="evaluateExpText">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                  <horstretch>0</horstretch>
@@ -342,7 +352,7 @@
               </widget>
              </item>
              <item>
-              <widget class="QPushButton" name="bEvaluar">
+              <widget class="QPushButton" name="evaluateButton">
                <property name="text">
                 <string>Ok</string>
                </property>
@@ -353,7 +363,7 @@
            <item>
             <layout class="QVBoxLayout" name="verticalLayout_12">
              <item>
-              <widget class="QLabel" name="lEvalResult">
+              <widget class="QLabel" name="evaluateResultLabel">
                <property name="text">
                 <string>...</string>
                </property>
@@ -412,7 +422,7 @@
               </widget>
              </item>
              <item alignment="Qt::AlignHCenter">
-              <widget class="QPushButton" name="bEliminar">
+              <widget class="QPushButton" name="removeButton">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                  <horstretch>0</horstretch>
@@ -526,7 +536,6 @@
                   <property name="autoFillBackground">
                    <bool>true</bool>
                   </property>
-                  <zorder>label_8</zorder>
                  </widget>
                 </item>
                 <item>
@@ -608,7 +617,6 @@
                   <property name="autoFillBackground">
                    <bool>true</bool>
                   </property>
-                  <zorder>label_6</zorder>
                  </widget>
                 </item>
                 <item>
@@ -748,7 +756,7 @@
                      </size>
                     </property>
                     <property name="autoFillBackground">
-                     <bool>false</bool>
+                     <bool>true</bool>
                     </property>
                    </widget>
                   </widget>
@@ -782,7 +790,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1021</width>
+     <width>1039</width>
      <height>27</height>
     </rect>
    </property>
