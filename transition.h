@@ -6,23 +6,23 @@
 class Transition : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QChar evalChar READ getEvalChar WRITE setEvalChar)
-    Q_PROPERTY(QChar stackOut READ getStackOut WRITE setStackOut)
-    Q_PROPERTY(QChar stackIn READ getStackIn WRITE setStackIn)
+    Q_PROPERTY(QString evalChar READ getEvalChar WRITE setEvalChar)
+    Q_PROPERTY(QString stackOut READ getStackOut WRITE setStackOut)
+    Q_PROPERTY(QString stackIn READ getStackIn WRITE setStackIn)
     Q_PROPERTY(QObject* targetState READ getTargetState WRITE setTargetState)
 public:
     explicit Transition(QObject *parent = 0);
 
-    Transition(QChar evalChar, QChar stackOut, QChar stackIn,QObject* targetState,QObject *parent = 0);
+    Transition(QString evalChar, QString stackOut, QString stackIn,QObject* targetState,QObject *parent = 0);
 
-    QChar getEvalChar() const;
-    void setEvalChar(const QChar &value);
+    QString getEvalChar() const;
+    void setEvalChar(const QString &value);
 
-    QChar getStackOut() const;
-    void setStackOut(const QChar &value);
+    QString getStackOut() const;
+    void setStackOut(const QString &value);
 
-    QChar getStackIn() const;
-    void setStackIn(const QChar &value);
+    QString getStackIn() const;
+    void setStackIn(const QString &value);
 
     QObject* getTargetState() const;
     void setTargetState(QObject* &state);
@@ -32,9 +32,9 @@ signals:
 public slots:
 
 private:
-    QChar evalChar;
-    QChar stackOut;
-    QChar stackIn;
+    QString evalChar;
+    QString stackOut;
+    QString stackIn;
     QObject* targetState;
 
 };

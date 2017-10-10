@@ -14,6 +14,12 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->removeButton,SIGNAL(clicked()),this,SLOT(removeState()));
     connect(ui->evaluateButton,SIGNAL(clicked()),this,SLOT(evaluateExp()));
     ui->scrollArea->setWidget(ui->svgView);
+
+    QString a = "*";
+
+    if(a != "*"){
+        qDebug()<<"asd";
+    }
 }
 
 MainWindow::~MainWindow()
@@ -84,9 +90,9 @@ void MainWindow::addRule()
         int state1 = ui->stateList1->currentRow();
         int state2 = ui->stateList2->currentRow();
 
-        QChar evalChar = ui->evalCharText->text().at(0);
-        QChar stackOut = ui->stackOutText->text().at(0);
-        QChar stackIn = ui->stackInText->text().at(0);
+        QString evalChar = ui->evalCharText->text();
+        QString stackOut = ui->stackOutText->text();
+        QString stackIn = ui->stackInText->text();
         pdAutomaton->getState(state1)->addRule(new Transition(evalChar,stackOut,stackIn,pdAutomaton->getState(state2)));
         QTreeWidgetItem* item = new QTreeWidgetItem();
         item->setText(0,ui->stateList2->currentItem()->text());

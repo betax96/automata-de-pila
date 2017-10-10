@@ -51,6 +51,15 @@ int PDAutomaton::getIndex(State *state)
     return states->indexOf(state);
 }
 
+QString PDAutomaton::reverse(QString str)
+{
+    QString reverseStr = "";
+    for(int i=0;i<str.count();i++){
+        reverseStr.prepend(str.at(i));
+    }
+    return reverseStr;
+}
+
 int PDAutomaton::evaluateExp(QString exp)
 {
     if(initState()==NULL){
@@ -63,60 +72,68 @@ int PDAutomaton::evaluateExp(QString exp)
 
 
 
-bool PDAutomaton::recEval(QString exp, QString stack, State *state)
-{
+bool PDAutomaton::recEval(QString exp, QString stack, State *state){
+
+    if(state==NULL){
+        return false;
+    }
     if(exp.count()==0&&state->getType()==State::TYPE_ACCEPT){
         return true;
     }
-    if(exp.count()==0||state==NULL){
-        return false;
-    }
+
     int acp = false;
-    QChar c = exp.at(0);
+
     for(int i=0;i<state->ruleCount();i++){
         Transition *r = state->getRule(i);
         QString tStack = stack;
-        if(r->getEvalChar()=='*'){
-            if(r->getStackOut()=='*'){
+        QString tExp = exp;
+        if(r->getEvalChar()=="*"){
+            if(r->getStackOut()=="*"){
 
-                if(r->getStackIn()!='*'){
-                     tStack=tStack.prepend(r->getStackIn());
+                if(r->getStackIn()!="*"&&r->getStackIn()!="#"){
+                     tStack=tStack.prepend(reverse(r->getStackIn()));
                 }
-                acp=acp||recEval(exp,tStack,qobject_cast<State*>(r->getTargetState()));
-            }else if(r->getStackOut()=='#'&&tStack.count()==0){
-                if(r->getStackIn()!='*'){
-                     tStack=tStack.prepend(r->getStackIn());
+                acp=acp||recEval(tExp,tStack,qobject_cast<State*>(r->getTargetState()));
+            }else if(r->getStackOut()=="#"&&tStack.count()==0){
+                if(r->getStackIn()!="*"&&r->getStackIn()!="#"){
+                     tStack=tStack.prepend(reverse(r->getStackIn()));
                 }
-                acp=acp||recEval(exp,tStack,qobject_cast<State*>(r->getTargetState()));
+                acp=acp||recEval(tExp,tStack,qobject_cast<State*>(r->getTargetState()));
             }else if(stack.count()>0&&r->getStackOut()==stack.at(0)){
                 tStack=tStack.remove(0,1);
-                if(r->getStackIn()!='*'){
-                     tStack=tStack.prepend(r->getStackIn());
+                if(r->getStackIn()!="*"&&r->getStackIn()!="#"){
+                     tStack=tStack.prepend(reverse(r->getStackIn()));
                 }
-                acp=acp||recEval(exp,tStack,qobject_cast<State*>(r->getTargetState()));
+                acp=acp||recEval(tExp,tStack,qobject_cast<State*>(r->getTargetState()));
             }
         }else{
-            if(r->getEvalChar()==c){
-                if(r->getStackOut()=='*'){
+            if(exp.count()>0&&r->getEvalChar()==tExp.at(0)){
+                if(r->getStackOut()=="*"){
 
-                    if(r->getStackIn()!='*'){
-                         tStack=tStack.prepend(r->getStackIn());
+                    if(r->getStackIn()!="*"&&r->getStackIn()!="#"){
+                         tStack=tStack.prepend(reverse(r->getStackIn()));
                     }
-                    acp=acp||recEval(exp.remove(0,1),tStack,qobject_cast<State*>(r->getTargetState()));
-                }else if(r->getStackOut()=='#'&&tStack.count()==0){
-                    if(r->getStackIn()!='*'){
-                         tStack=tStack.prepend(r->getStackIn());
+                    acp=acp||recEval(tExp.remove(0,1),tStack,qobject_cast<State*>(r->getTargetState()));
+                }else if(r->getStackOut()=="#"&&tStack.count()==0){
+                    if(r->getStackIn()!="*"&&r->getStackIn()!="#"){
+                         tStack=tStack.prepend(reverse(r->getStackIn()));
                     }
-                    acp=acp||recEval(exp,tStack,qobject_cast<State*>(r->getTargetState()));
+                    acp=acp||recEval(tExp.remove(0,1),tStack,qobject_cast<State*>(r->getTargetState()));
                 }else if(stack.count()>0&&r->getStackOut()==stack.at(0)){
                     tStack=tStack.remove(0,1);
-                    if(r->getStackIn()!='*'){
-                         tStack=tStack.prepend(r->getStackIn());
+                    if(r->getStackIn()!="*"&&r->getStackIn()!="#"){
+                         tStack=tStack.prepend(reverse(r->getStackIn()));
                     }
-                    acp=acp||recEval(exp.remove(0,1),tStack,qobject_cast<State*>(r->getTargetState()));
+                    acp=acp||recEval(tExp.remove(0,1),tStack,qobject_cast<State*>(r->getTargetState()));
                 }
             }
+        }
+        if(acp){
+            break;
         }
     }
     return acp;
 }
+
+
+

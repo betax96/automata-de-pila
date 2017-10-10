@@ -5,7 +5,7 @@ Transition::Transition(QObject *parent) : QObject(parent)
 
 }
 
-Transition::Transition(QChar evalChar, QChar stackOut, QChar stackIn, QObject* targetState, QObject *parent) : QObject(parent)
+Transition::Transition(QString evalChar, QString stackOut, QString stackIn, QObject* targetState, QObject *parent) : QObject(parent)
 {
     this->evalChar = evalChar;
     this->stackOut = stackOut;
@@ -14,32 +14,32 @@ Transition::Transition(QChar evalChar, QChar stackOut, QChar stackIn, QObject* t
 
 }
 
-QChar Transition::getEvalChar() const
+QString Transition::getEvalChar() const
 {
     return evalChar;
 }
 
-void Transition::setEvalChar(const QChar &value)
+void Transition::setEvalChar(const QString &value)
 {
     evalChar = value;
 }
 
-QChar Transition::getStackOut() const
+QString Transition::getStackOut() const
 {
     return stackOut;
 }
 
-void Transition::setStackOut(const QChar &value)
+void Transition::setStackOut(const QString &value)
 {
     stackOut = value;
 }
 
-QChar Transition::getStackIn() const
+QString Transition::getStackIn() const
 {
     return stackIn;
 }
 
-void Transition::setStackIn(const QChar &value)
+void Transition::setStackIn(const QString &value)
 {
     stackIn = value;
 }

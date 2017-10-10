@@ -11,38 +11,38 @@ GraphSvg::GraphSvg(QSize defaultSize, Color defaultEdgeColor, Color defaultNodeC
     this->defaultEdgeColor = defaultEdgeColor;
     this->defaultNodeColor = defaultNodeColor;
 
-    graph = new Graph();
-
-        graphAttr = GraphAttributes( *graph, GraphAttributes::nodeGraphics |
-            GraphAttributes::edgeGraphics |
-            GraphAttributes::nodeLabel |
-            GraphAttributes::nodeStyle |
-            GraphAttributes::edgeType |
-            GraphAttributes::edgeArrow |
-            GraphAttributes::edgeStyle );
-        nodeList = new QVector<node>();
-        edgeList = new QVector<edge>();
+    graph = Graph();
+    graphAttr = GraphAttributes( graph, GraphAttributes::nodeGraphics |
+        GraphAttributes::edgeGraphics |
+        GraphAttributes::nodeLabel |
+        GraphAttributes::nodeStyle |
+        GraphAttributes::nodeType |
+        GraphAttributes::edgeType |
+        GraphAttributes::edgeArrow |
+        GraphAttributes::edgeStyle );
+    nodeList = new QVector<node>();
+    edgeList = new QVector<edge>();
 }
 
 node GraphSvg::addNode(State *state, QSize size , Color nodeColor)
 {
-    node newNode = graph ->newNode();
+    node newNode = graph.newNode();
     graphAttr.width(newNode) = size.width();
     graphAttr.height(newNode) = size.height();
-    graphAttr.shape(newNode) = ogdf::Shape::shEllipse;
+    graphAttr.shape(newNode) = ogdf::Shape::Ellipse;
     graphAttr.fillColor(newNode) = nodeColor;
     graphAttr.label(newNode) = state->getName().toStdString();
+    graphAttr.x(newNode) = 50;
+    graphAttr.y(newNode) = 50;
     nodeList->push_back(newNode);
     return newNode;
 }
 
 void GraphSvg::addEdge(node source, node target, Color edgeColor)
 {
-    edge newEdge = graph->newEdge(source, target);
-    graphAttr.arrowType(newEdge) = ogdf::EdgeArrow::eaLast;
+    edge newEdge = graph.newEdge(source, target);
+    graphAttr.arrowType(newEdge) = ogdf::EdgeArrow::Last;
     graphAttr.strokeColor(newEdge) = edgeColor;
-
-   graphAttr.bends(newEdge);
     edgeList->push_back(newEdge);
 }
 
@@ -96,8 +96,8 @@ void GraphSvg::drawAuto(PDAutomaton *automata, Color init, Color acept)
 bool GraphSvg::saveSvg(QString name)
 {
     PlanarizationLayout pl;
-
     pl.call(graphAttr);
+
     GraphIO::drawSVG( graphAttr, name.toStdString() );
 }
 

@@ -18,6 +18,7 @@ public:
     State* initState();
     int stateCount();
     int getIndex(State *state);
+    QString reverse(QString str);
 
 public slots:
 

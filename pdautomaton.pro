@@ -32,3 +32,6 @@ INCLUDEPATH += ./ogdf
 
 LIBS += -L$$PWD/./ -lOGDF
 PRE_TARGETDEPS += $$PWD/./libOGDF.a
+
+LIBS += -L$$PWD/./ -lCOIN
+PRE_TARGETDEPS += $$PWD/./libCOIN.a

@@ -11,6 +11,7 @@
 #include "state.h"
 #include "transition.h"
 #include "pdautomaton.h"
+#include <ogdf/planarity/PlanarizationLayout.h>
 
 using namespace ogdf;
 class GraphSvg : public QObject
@@ -30,7 +31,7 @@ signals:
 public slots:
 
 private:
-    Graph* graph;
+    Graph graph;
     GraphAttributes graphAttr;
     QSize defaultSize;
     Color defaultNodeColor;
