@@ -5,9 +5,6 @@
 #include "state.h"
 #include "simulationroute.h"
 
-#define EMPTY_CHAR "*"
-#define EMPTY_STACK "#"
-
 class PDAutomaton : public QObject
 {
     Q_OBJECT
