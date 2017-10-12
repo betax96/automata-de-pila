@@ -9,17 +9,16 @@ MainWindow::MainWindow(QWidget *parent) :
     pdAutomaton = new PDAutomaton();
     haveInitState = false;
     this->layout()->setSizeConstraint(QLayout::SetFixedSize);
+    simulationIndex = 0;
     connect(ui->addStateButton,SIGNAL(clicked()),this,SLOT(addState()));
     connect(ui->addRuleButton,SIGNAL(clicked()),this,SLOT(addRule()));
     connect(ui->removeButton,SIGNAL(clicked()),this,SLOT(removeState()));
     connect(ui->evaluateButton,SIGNAL(clicked()),this,SLOT(evaluateExp()));
+    connect(ui->nextStepButton,SIGNAL(clicked()),this,SLOT(nextStep()));
+    connect(ui->prevStepButton,SIGNAL(clicked()),this,SLOT(prevStep()));
+    connect(ui->finalStepButton,SIGNAL(clicked()),this,SLOT(finalStep()));
+    connect(ui->initStepButton,SIGNAL(clicked()),this,SLOT(initStep()));
     ui->scrollArea->setWidget(ui->svgView);
-
-    QString a = "*";
-
-    if(a != "*"){
-        qDebug()<<"asd";
-    }
 }
 
 MainWindow::~MainWindow()
@@ -96,7 +95,7 @@ void MainWindow::addRule()
         pdAutomaton->getState(state1)->addRule(new Transition(evalChar,stackOut,stackIn,pdAutomaton->getState(state2)));
         QTreeWidgetItem* item = new QTreeWidgetItem();
         item->setText(0,ui->stateList2->currentItem()->text());
-        QString text2 = ui->evalCharText->text()+"/"+ui->stackOutText->text()+"/"+ui->stackInText->text();
+        QString text2 = ui->evalCharText->text()+","+ui->stackOutText->text()+"/"+ui->stackInText->text();
         item->setText(1,text2);
         ui->treeWidget->topLevelItem(state1)->addChild(item);
         refresh();
@@ -110,14 +109,21 @@ void MainWindow::evaluateExp(){
     int result = pdAutomaton->evaluateExp(exp);
     switch(result){
     case 0:
-        ui->evaluateResultLabel->setText("Expresion no valida");
+        ui->evaluateResultLabel->setText("No Aceptado");
+        ui->evaluateResultLabel->setStyleSheet("QLabel {Color: #FF0000}");
+        initStep();
         break;
     case 1:
-        ui->evaluateResultLabel->setText("Expresion aceptada");
+        ui->evaluateResultLabel->setText("Aceptado");
+        ui->evaluateResultLabel->setStyleSheet("QLabel {Color: #04B404}");
+        initStep();
         break;
     default:
         ui->evaluateResultLabel->setText("Error");
+        ui->evaluateResultLabel->setStyleSheet("QLabel {Color: #000000}");
     }
+
+
 }
 
 void MainWindow::refresh()
@@ -132,5 +138,37 @@ void MainWindow::refresh()
     }
 }
 
+void MainWindow::nextStep()
+{
+    if(pdAutomaton->getSimRoute()!=NULL&&simulationIndex+1<pdAutomaton->getSimRoute()->simDataCount()){
+        simulationIndex++;
+        ui->simulationText->setPlainText(pdAutomaton->stringSimData(simulationIndex));
+    }
+}
 
+void MainWindow::prevStep()
+{
+    if(pdAutomaton->getSimRoute()!=NULL&&simulationIndex-1>=0){
+        simulationIndex--;
+        ui->simulationText->setPlainText(pdAutomaton->stringSimData(simulationIndex));
+    }
+
+}
+
+void MainWindow::finalStep()
+{
+    if(pdAutomaton->getSimRoute()!=NULL){
+        simulationIndex = pdAutomaton->getSimRoute()->simDataCount()-1;
+        ui->simulationText->setPlainText(pdAutomaton->stringSimData(simulationIndex));
+    }
+
+}
+
+void MainWindow::initStep()
+{
+    if(pdAutomaton->getSimRoute()!=NULL){
+        simulationIndex = 0;
+        ui->simulationText->setPlainText(pdAutomaton->stringSimData(simulationIndex));
+    }
+}
 

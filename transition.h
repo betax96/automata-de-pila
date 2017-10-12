@@ -6,10 +6,6 @@
 class Transition : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QString evalChar READ getEvalChar WRITE setEvalChar)
-    Q_PROPERTY(QString stackOut READ getStackOut WRITE setStackOut)
-    Q_PROPERTY(QString stackIn READ getStackIn WRITE setStackIn)
-    Q_PROPERTY(QObject* targetState READ getTargetState WRITE setTargetState)
 public:
     explicit Transition(QObject *parent = 0);
 

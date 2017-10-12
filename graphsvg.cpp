@@ -5,7 +5,7 @@ GraphSvg::GraphSvg(QObject *parent) : QObject(parent)
 
 }
 
-GraphSvg::GraphSvg(QSize defaultSize, Color defaultEdgeColor, Color defaultNodeColor, QObject *parent)
+GraphSvg::GraphSvg(QSize defaultSize, Color defaultEdgeColor, Color defaultNodeColor, QObject *parent) : QObject(parent)
 {
     this->defaultSize = defaultSize;
     this->defaultEdgeColor = defaultEdgeColor;
@@ -98,6 +98,6 @@ bool GraphSvg::saveSvg(QString name)
     PlanarizationLayout pl;
     pl.call(graphAttr);
 
-    GraphIO::drawSVG( graphAttr, name.toStdString() );
+    return GraphIO::drawSVG(graphAttr, name.toStdString());
 }
 

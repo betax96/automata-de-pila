@@ -18,13 +18,17 @@ SOURCES += main.cpp\
     graphsvg.cpp \
     state.cpp \
     transition.cpp \
-    pdautomaton.cpp
+    pdautomaton.cpp \
+    simulationdata.cpp \
+    simulationroute.cpp
 
 HEADERS  += mainwindow.h \
     graphsvg.h \
     state.h \
     transition.h \
-    pdautomaton.h
+    pdautomaton.h \
+    simulationdata.h \
+    simulationroute.h
 
 FORMS    += mainwindow.ui
 
@@ -35,3 +39,6 @@ PRE_TARGETDEPS += $$PWD/./libOGDF.a
 
 LIBS += -L$$PWD/./ -lCOIN
 PRE_TARGETDEPS += $$PWD/./libCOIN.a
+
+DISTFILES += \
+    pdautomaton.qmodel

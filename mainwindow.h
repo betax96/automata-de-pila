@@ -27,11 +27,16 @@ public slots:
     void removeState();
     void evaluateExp();
     void refresh();
+    void nextStep();
+    void prevStep();
+    void finalStep();
+    void initStep();
 private:
     Ui::MainWindow *ui;
     PDAutomaton *pdAutomaton;
     bool haveInitState;
     GraphSvg *graph;
+    int simulationIndex;
 };
 
 #endif // MAINWINDOW_H

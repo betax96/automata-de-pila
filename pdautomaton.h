@@ -3,6 +3,10 @@
 
 #include <QObject>
 #include "state.h"
+#include "simulationroute.h"
+
+#define EMPTY_CHAR "*"
+#define EMPTY_STACK "#"
 
 class PDAutomaton : public QObject
 {
@@ -19,13 +23,15 @@ public:
     int stateCount();
     int getIndex(State *state);
     QString reverse(QString str);
+    SimulationRoute* getSimRoute();
+    QString stringSimData(int index);
 
 public slots:
 
 private:
-    bool recEval(QString exp, QString stack, State *e);
-
+    bool recEval(SimulationRoute *route, int stepNum, QString exp, QString stack, State *e);
     QList<State*> *states;
+    SimulationRoute *simulation;
 };
 
 #endif // AUTOMATAPILA_H

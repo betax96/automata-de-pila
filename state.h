@@ -8,8 +8,7 @@
 class State : public QObject
 {
     Q_OBJECT
-     Q_PROPERTY(QString name READ getName WRITE setName)
-     Q_PROPERTY(int type READ getType WRITE setType)
+
 public:
     static const int TYPE_NORMAL = 0;
     static const int TYPE_ACCEPT = 2;
